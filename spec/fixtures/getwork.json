@@ -1,0 +1,14 @@
+HTTP/1.1 200 OK
+Server: nginx/1.0.4
+Date: Wed, 24 Aug 2011 15:18:04 GMT
+Content-Type: application/json; charset=utf-8
+Connection: keep-alive
+X-Host-List: [{"host":"f1.deepbit.net","port":8332,"ttr":0},{"host":"f2.deepbit.net","port":8332,"ttr":10}]
+Expires: Wed, 24 Aug 2011 15:18:04 UTC
+Content-Length: 600
+Cache-Control: no-cache, private, no-store
+Pragma: no-cache
+X-Long-Polling: /listenChannel
+X-Lift-Version: 2.3
+
+{"result":{"midstate":"e260e6ead8653bde7a4c797f19cc041fe5803b2f97c8cd9db8ffe261cc55dba9","data":"00000001cd2fc43be74ee2a39cceef65f692338288569dc1d52bfe0c0000061900000000d3dc009267f18f6d1c1ef5045f95a1b27501013b0c7a073bb11b1b7a0d3497474e55160b1a094a8600000000000000800000000000000000000000000000000000000000000000000000000000000000000000000000000080020000","hash1":"00000000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000010000","target":"ffffffffffffffffffffffffffffffffffffffffffffffffffffffff00000000"},"error":null,"id":"curltest"}
