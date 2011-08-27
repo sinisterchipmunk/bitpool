@@ -1,7 +1,5 @@
-require 'redis/orm'
 require 'bitcoin-client'
 require 'yaml'
-require 'redis'
 
 module Bitpool
   autoload :Configuration, "bitpool/configuration"
