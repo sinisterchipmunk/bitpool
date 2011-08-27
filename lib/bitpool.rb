@@ -16,6 +16,8 @@ module Bitpool
   autoload :Worker,        "bitpool/worker"
   autoload :Share,         "bitpool/share"
   autoload :Credit,        "bitpool/credit"
+  autoload :BlockCredit,   "bitpool/block_credit"
+  autoload :SharesCredit,  "bitpool/shares_credit"
   
   class << self
     def config

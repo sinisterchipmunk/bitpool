@@ -18,12 +18,14 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_development_dependency 'rspec',      '~> 2.6.0'
-  s.add_development_dependency 'fakeweb',    '~> 1.3.0'
-  s.add_development_dependency 'rake',       '~> 0.9.2'
-  s.add_development_dependency 'bundler',    '~> 1.0.18'
+  s.add_development_dependency 'rspec',            '~> 2.6.0'
+  s.add_development_dependency 'fakeweb',          '~> 1.3.0'
+  s.add_development_dependency 'rake',             '~> 0.9.2'
+  s.add_development_dependency 'bundler',          '~> 1.0.18'
+  s.add_development_dependency 'database_cleaner', '~> 0.6.7'
+  s.add_development_dependency 'sqlite3',          '~> 1.3.4'
   
-  s.add_runtime_dependency 'redis-orm',      '~> 0.0.3'
-  s.add_runtime_dependency 'bitcoin-client', '~> 0.0.1'
-  s.add_runtime_dependency 'rack',           '~> 1.3.2'
+  s.add_runtime_dependency 'activerecord',         '~> 3.0.0'
+  s.add_runtime_dependency 'bitcoin-client',       '~> 0.0.1'
+  s.add_runtime_dependency 'rack',                 '~> 1.3.2'
 end

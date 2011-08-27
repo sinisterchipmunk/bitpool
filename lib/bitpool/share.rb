@@ -1,13 +1,11 @@
 require 'digest/sha2'
 
-class Bitpool::Share < Redis::ORM
+class Bitpool::Share < ActiveRecord::Base
+  self.table_name = :bitpool_shares
+
   include Bitpool::RPC
   include Bitpool::Target
 
-  attribute :data
-  attribute :height
-  attribute :accepted, false
-  belongs_to :account
   belongs_to :worker
   after_initialize :check_work
   after_initialize :set_height
@@ -29,6 +27,7 @@ class Bitpool::Share < Redis::ORM
     if accepted?
       worker && worker.report_accepted_block(self)
     end
+    true
   end
   
   def check_hash
@@ -63,6 +62,7 @@ class Bitpool::Share < Redis::ORM
     if new_record?
       self.accepted = bitcoin.getwork(data)
     end
+    true
   end
   
   def accepted?

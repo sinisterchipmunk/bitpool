@@ -3,7 +3,9 @@ require 'spec_helper'
 describe Bitpool::Share do
   subject { Bitpool::Share.new(valid_attributes) }
   
-  before(:each) { FakeWeb.register_uri(:post, 'http://user:pass@localhost:8332/', :response => fixture('getwork_valid_with_param')) }
+  before(:each) do
+    FakeWeb.register_uri(:post, 'http://user:pass@localhost:8332/', :response => fixture('getwork_valid_with_param'))
+  end
   
   def valid_attributes
     { :data => "01000000" +
@@ -42,7 +44,9 @@ describe Bitpool::Share do
   end
   
   it "should not be valid with duplicate data" do
-    # p Bitpool::Share.new(valid_attributes).data
+    # required to keep the worker from wiping the share out immediately
+    Bitcoin::Client.any_instance.stub(:getwork).and_return(false)
+    
     Bitpool::Share.new(valid_attributes).save!
     Bitpool::Share.new(valid_attributes).should_not be_valid
   end

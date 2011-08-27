@@ -1,16 +1,15 @@
-class Bitpool::Account < Redis::ORM
+class Bitpool::Account < ActiveRecord::Base
+  self.table_name = :bitpool_accounts
   has_many :workers
   attr_accessor :active_worker
   
   class << self
     def authenticate(account_key, worker_name)
-      account = find(account_key) || new(:id => account_key)
-      unless worker = account.workers.select { |w| w.name == worker_name }.first
-        worker = Bitpool::Worker.create(:name => worker_name)
-        account.workers << worker
+      account = find_by_key(account_key) || create(:key => account_key)
+      unless worker = account.workers.find_by_name(worker_name)
+        worker = account.workers.create(:name => worker_name)
       end
       account.active_worker = worker
-      account.save
       account
     end
   end

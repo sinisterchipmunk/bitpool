@@ -1,9 +1,10 @@
-class Bitpool::Worker < Redis::ORM
+class Bitpool::Worker < ActiveRecord::Base
+  self.table_name = :bitpool_workers
+  
   include Bitpool::Target
   include Bitpool::RPC
   
-  attribute :name
-  has_many :shares, :relation => :worker
+  has_many :shares
   has_many :credits
   belongs_to :account
 
@@ -16,26 +17,23 @@ class Bitpool::Worker < Redis::ORM
   
   def complete_work(req)
     data = req['params'][0]
-    share = Bitpool::Share.new(:data => data, :account => account, :worker => self)
-    if share.save
-      shares << share
-      save
-    end
+    share = shares.create!(:data => data)
     respond_to req['id'], share.accepted
   end
   
   def report_accepted_block(block)
-    all_workers = []
-    Bitpool::Share.all.each do |share|
-      if share.height <= block.height
-        credit = Bitpool::Credit.create
-        worker = share.worker
-        worker.credits << credit
-        all_workers << worker unless all_workers.include?(worker)
-        share.destroy
+    up_to_this_block = ['height <= ?', block.height]
+    
+    Bitpool::Worker.transaction do
+      Bitpool::Worker.all.each do |worker|
+        count = worker.shares.count(:conditions => up_to_this_block)
+        worker.credits << Bitpool::SharesCredit.create!(:count => count, :height => block.height)
+        if block.worker == worker
+          worker.credits << Bitpool::BlockCredit.create!(:height => block.height)
+        end
       end
+      Bitpool::Share.destroy_all(up_to_this_block)
     end
-    all_workers.each { |worker| worker.save! }
   end
   
   def respond_to(request_id, result, error = nil)

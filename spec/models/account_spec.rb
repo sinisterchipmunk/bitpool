@@ -17,18 +17,17 @@ describe Bitpool::Account do
     end
     
     it "should have the specified account key" do
-      subject.id.should == '1234'
+      subject.key.should == '1234'
     end
     
     it "should find existing account" do
-      first = Bitpool::Account.create!(:id => '1234')
+      first = Bitpool::Account.create!(:key => '1234')
       subject.should == first
     end
     
     it "should find existing workers" do
-      account = Bitpool::Account.new(:id => '1234')
-      account.workers << Bitpool::Worker.create!(:name => 'worker')
-      account.save!
+      account = Bitpool::Account.create(:key => '1234')
+      account.workers.create!(:name => 'worker')
       
       subject.should == account
       subject.workers.first.should == account.workers.first

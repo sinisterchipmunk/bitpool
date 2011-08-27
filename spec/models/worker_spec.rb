@@ -17,8 +17,24 @@ describe Bitpool::Worker do
       subject.report_accepted_block(Bitpool::Share.create!(:data => '123410', :worker => subject))
     end
     
-    it "should create credits for each share with height less than accepted share height" do
-      subject.credits.should have(4).items
+    it "should remove all credits except one" do # (the one with greater block height)
+      all = Bitpool::Share.all
+      all.length.should == 1
+      all.shift.height.should == 142407
+    end
+    
+    it "should create 2 credits: 1 for block, 1 for all shares" do
+      subject.credits.should have(2).items
+    end
+    
+    it "should contain the share count in credits" do
+      subject.credits.first.should be_kind_of(Bitpool::SharesCredit)
+      subject.credits.first.count.should == 4
+    end
+    
+    it "should contain the block count in credits" do
+      subject.credits.last.should be_kind_of(Bitpool::BlockCredit)
+      subject.credits.last.count.should == 1
     end
   end
   

@@ -13,3 +13,12 @@ task :server do
   require 'rack'
   Rack::Server.new(:app => proc { |env| Bitpool::Server.new.call(env) }, :Port => ENV['PORT'] || 3002).start
 end
+
+desc "Migrate the database through scripts in db/migrate. Target specific version with VERSION=x"
+task :migrate do
+  require 'active_record'
+  dbfile = File.expand_path("spec/fixtures/db.sqlite3", File.dirname(__FILE__))
+  FileUtils.rm dbfile if File.file?(dbfile)
+  ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database => dbfile)
+  ActiveRecord::Migrator.migrate('migrations', ENV["VERSION"] ? ENV["VERSION"].to_i : nil )
+end
