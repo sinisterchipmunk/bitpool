@@ -4,19 +4,16 @@ class Bitpool::Share < Redis::ORM
   include Bitpool::RPC
   include Bitpool::Target
 
-  attribute :version
-  attribute :previous_block
-  attribute :merkle_root
-  attribute :time
-  attribute :bits
-  attribute :nonce
   attribute :data
+  attribute :height
   attribute :accepted, false
   belongs_to :account
   belongs_to :worker
   after_initialize :check_work
+  after_initialize :set_height
   
   validates_presence_of :data
+  validates_presence_of :worker
   validates_uniqueness_of :data
   
   validate do |record|
@@ -56,6 +53,10 @@ class Bitpool::Share < Redis::ORM
     hash = wordreverse(hash)
     
     encode_hex(hash)
+  end
+  
+  def set_height
+    self.height ||= bitcoin.getblockcount
   end
   
   def check_work

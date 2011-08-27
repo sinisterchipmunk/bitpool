@@ -11,11 +11,16 @@ describe Bitpool::Share do
         "e320b6c2fffc8d750423db8b1eb942ae710e951ed797f7affc8892b0f1fc122b" +
         "c7f5d74d" +
         "f2b9441a" +
-         "42a14695" }
+         "42a14695", :worker => Bitpool::Worker.create!(:name => 'worker') }
+  end
+  
+  it "should store block height" do
+    Bitcoin::Client.any_instance.stub(:getblockcount).and_return(142407)
+    subject.height.should == 142407
   end
   
   it "should calculate check hash properly" do
-    subject = Bitpool::Share.new(:data => valid_attributes[:data])
+    subject = Bitpool::Share.new(valid_attributes)
     subject.check_hash.should == 0x000f67d1f74b5700b39d49067a41e597be13460fb79f9d1d40f7f2103b9fac21
   end
   
