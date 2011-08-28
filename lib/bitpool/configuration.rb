@@ -14,28 +14,4 @@ class Bitpool::Configuration
       send("#{key}=", value)
     end
   end
-  
-  def redis_port=(port)
-    Redis.port = port
-  end
-  
-  def redis_port
-    Redis.port
-  end
-  
-  def redis_host=(host)
-    Redis.host = host
-  end
-  
-  def redis_host
-    Redis.host
-  end
-  
-  private
-  def find_class(m)
-    case m
-      when String then eval(m)
-      else m
-    end
-  end
 end

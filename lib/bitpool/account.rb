@@ -2,6 +2,7 @@ class Bitpool::Account < ActiveRecord::Base
   self.table_name = :bitpool_accounts
   has_many :workers
   attr_accessor :active_worker
+  delegate :request_work, :complete_work, :to => :active_worker
   
   class << self
     def authenticate(account_key, worker_name)

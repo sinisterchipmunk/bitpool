@@ -11,7 +11,16 @@ desc "start bitpool on a webrick server"
 task :server do
   require 'bitpool'
   require 'rack'
-  Rack::Server.new(:app => proc { |env| Bitpool::Server.new.call(env) }, :Port => ENV['PORT'] || 3002).start
+  require 'active_record'
+  
+  # test connection to bitcoind before going live
+  extend Bitpool::RPC
+  puts "Testing bitcoind JSON-RPC interface..."
+  puts bitcoin.getinfo.to_json
+
+  dbfile = File.expand_path("spec/fixtures/db.sqlite3", File.dirname(__FILE__))
+  ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database => dbfile)
+  Rack::Server.new(:app => proc { |env| Bitpool::Server.new_instance.call(env) }, :Port => ENV['PORT'] || 38332).start
 end
 
 desc "Migrate the database through scripts in db/migrate. Target specific version with VERSION=x"

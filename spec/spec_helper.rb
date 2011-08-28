@@ -18,6 +18,7 @@ RSpec.configure do |c|
   end
   
   c.before(:each) do
+    Bitpool.reset_config!
     DatabaseCleaner.start
   end
   

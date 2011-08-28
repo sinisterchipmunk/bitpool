@@ -25,5 +25,9 @@ module Bitpool
         Bitpool::Configuration.new(yml || {})
       end
     end
+    
+    def reset_config!
+      @config = Bitpool::Configuration.new
+    end
   end
 end
