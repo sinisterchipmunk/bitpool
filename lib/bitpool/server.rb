@@ -15,7 +15,6 @@ class Bitpool::Server
   
   def process_getwork(request, response)
     json = request.body.read
-    puts json
     json = (JSON.load(json) || {})
     if json && json['params'].empty?
       result = account.request_work(json)
